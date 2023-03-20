@@ -62,12 +62,18 @@ async def get_or_create_db_pool(
     settings: Settings,
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get or create the DB connection pool."""
-    pool_key = DbPoolKey(
-        settings.db_host,
-        settings.db_port,
-        settings.db_user,
-        settings.db_service_name,
-    )
+    if settings.db_dsn:
+        pool_key = DbPoolKey(
+            settings.db_user,
+            settings.db_dsn,
+        )
+    else:
+        pool_key = DbPoolKey(
+            settings.db_host,
+            settings.db_port,
+            settings.db_user,
+            settings.db_service_name,
+        )
 
     if pools.DB_POOLS.get(pool_key) is not None:
         ttl = settings.db_conn_ttl
@@ -81,14 +87,20 @@ async def get_or_create_db_pool(
             await close_db_pool(pool)
         else:
             return pool
-
-    pool = await create_pool(
-        host=settings.db_host,
-        port=f"{settings.db_port}",
-        user=settings.db_user,
-        password=settings.db_password,
-        service_name=settings.db_service_name,
-    )
+    if settings.db_dsn:
+        pool = await create_pool(
+            user=settings.db_user,
+            password=settings.db_password,
+            dsn=settings.db_dsn,
+        )
+    else:
+        pool = await create_pool(
+            host=settings.db_host,
+            port=f"{settings.db_port}",
+            user=settings.db_user,
+            password=settings.db_password,
+            service_name=settings.db_service_name,
+        )
     pools.DB_POOLS[pool_key] = DbPoolAndCreatedTime(
         pool=pool, created_time=time.monotonic()
     )
