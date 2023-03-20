@@ -63,7 +63,7 @@ async def get_or_create_db_pool(
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get or create the DB connection pool."""
     if settings.db_dsn:
-        pool_key = DbPoolKey(
+        pool_key = DbPoolKey2(
             settings.db_user,
             settings.db_dsn,
         )
