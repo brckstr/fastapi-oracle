@@ -22,6 +22,11 @@ class DbPoolKey(NamedTuple):
     db_port: int
     db_user: str
     db_service_name: str
+        
+        
+class DbPoolKey2(NamedTuple):
+    db_user: str
+    db_dsn: str
 
 
 class DbPoolAndCreatedTime(NamedTuple):
