@@ -17,6 +17,7 @@ from fastapi_oracle.constants import (
     DbPoolAndCreatedTime,
     DbPoolConnAndCursor,
     DbPoolKey,
+    DbPoolKey,
 )
 from fastapi_oracle.errors import IntermittentDatabaseError
 
