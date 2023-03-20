@@ -9,7 +9,7 @@ license = "Apache-2.0"
 packages = [{include = "fastapi_oracle"}]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<4"
+python = ">=3.8,<4"
 fastapi = "*"
 pydantic = {extras = ["dotenv"], version = "*"}
 cx-Oracle-async = "*"
