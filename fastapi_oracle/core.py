@@ -117,6 +117,9 @@ async def get_db_pool(
 
     Suitable for use as a FastAPI path operation with depends().
     """
+    logger.warning(
+        f'Settings: {settings}'
+    )
     return await get_or_create_db_pool(settings)
 
 
