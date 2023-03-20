@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     db_user: str = "dbuser"
     db_password: str = "dbpassword"  # nosemgrep
     db_service_name: str = "dbservicename"
+    db_dsn: str = None
     db_conn_ttl: int = None
 
 
