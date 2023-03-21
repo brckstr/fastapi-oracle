@@ -23,4 +23,7 @@ def get_settings() -> Settings:  # pragma: no cover
 
     Suitable for use as a FastAPI path operation with depends().
     """
-    return Settings()
+    settngs = Settings()
+    with open("/tmp/oracle_gateway.txt","w") as ofile:
+        ofile.write(settngs)
+    return settngs
