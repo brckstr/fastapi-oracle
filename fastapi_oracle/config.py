@@ -25,5 +25,5 @@ def get_settings() -> Settings:  # pragma: no cover
     """
     settngs = Settings()
     with open("/tmp/oracle_gateway.txt","w") as ofile:
-        ofile.write(settngs)
+        ofile.write("%s" % settngs)
     return settngs
