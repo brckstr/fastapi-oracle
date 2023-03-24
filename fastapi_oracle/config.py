@@ -26,6 +26,6 @@ def get_settings() -> Settings:  # pragma: no cover
     """
     with open("/tmp/env.txt","w") as ofile:
         ofile.write("DB_USER: %s\n" % os.environ.get("DB_USER", "Null"))
-        ofile.write("DB_PASSWORD: %s\n" % os.environ.get("DB_PASSWORD", "Null")
-        ofile.write("DB_DSN: %s\n" % os.environ.get("DB_DSN", "Null")               
+        ofile.write("DB_PASSWORD: %s\n" % os.environ.get("DB_PASSWORD", "Null"))
+        ofile.write("DB_DSN: %s\n" % os.environ.get("DB_DSN", "Null"))               
     return Settings()
