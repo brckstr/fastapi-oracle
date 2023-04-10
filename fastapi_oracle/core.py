@@ -98,7 +98,7 @@ async def get_or_create_db_pool(
         dsn = cx_Oracle_async.makedsn(settings.db_host , f"{settings.db_port}" , service_name = settings.db_service_name)
         pool = await create_pool(
             settings.db_user,
-            password=settings.db_password,
+            settings.db_password,
             dsn,
         )
 #         pool = await create_pool(
