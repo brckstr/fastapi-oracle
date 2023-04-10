@@ -95,12 +95,7 @@ async def get_or_create_db_pool(
             dsn=settings.db_dsn,
         )
     else:
-        dsn = makedsn(settings.db_host , f"{settings.db_port}" , service_name = settings.db_service_name)
-        pool = await create_pool(
-            settings.db_user,
-            settings.db_password,
-            dsn,
-        )
+        pool = await create_pool(f"{settings.db_user}/{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_service_name}")
 #         pool = await create_pool(
 #             host=settings.db_host,
 #             port=f"{settings.db_port}",
