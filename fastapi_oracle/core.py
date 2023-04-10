@@ -4,7 +4,7 @@ from re import Pattern
 from typing import AsyncGenerator, Awaitable, Callable, ParamSpec, TypeVar
 
 from cx_Oracle import DatabaseError
-from cx_Oracle_async import create_pool
+from cx_Oracle_async import create_pool, makedsn
 from cx_Oracle_async.pools import AsyncPoolWrapper
 from fastapi import Depends
 from loguru import logger
@@ -95,7 +95,7 @@ async def get_or_create_db_pool(
             dsn=settings.db_dsn,
         )
     else:
-        dsn = cx_Oracle_async.makedsn(settings.db_host , f"{settings.db_port}" , service_name = settings.db_service_name)
+        dsn = makedsn(settings.db_host , f"{settings.db_port}" , service_name = settings.db_service_name)
         pool = await create_pool(
             settings.db_user,
             settings.db_password,
