@@ -95,14 +95,14 @@ async def get_or_create_db_pool(
             dsn=settings.db_dsn,
         )
     else:
-        pool = await create_pool(f"{settings.db_user}/{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_service_name}")
-#         pool = await create_pool(
-#             host=settings.db_host,
-#             port=f"{settings.db_port}",
-#             user=settings.db_user,
-#             password=settings.db_password,
-#             service_name=settings.db_service_name,
-#         )
+#         pool = await create_pool(f"{settings.db_user}/{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_service_name}")
+        pool = await create_pool(
+            host=settings.db_host,
+            port=f"{settings.db_port}",
+            user=settings.db_user,
+            password=settings.db_password,
+            service_name=settings.db_service_name,
+        )
     pools.DB_POOLS[pool_key] = DbPoolAndCreatedTime(
         pool=pool, created_time=time.monotonic()
     )
