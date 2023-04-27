@@ -10,14 +10,13 @@ from fastapi import Depends
 from loguru import logger
 
 from fastapi_oracle import pools
-from fastapi_oracle.config import Settings, get_settings
+from fastapi_oracle.config import Settings, CollectionModel, get_settings
 from fastapi_oracle.constants import (
     CAMEL_TO_SNAKE_REGEX,
     DbPoolAndConn,
     DbPoolAndCreatedTime,
     DbPoolConnAndCursor,
     DbPoolKey,
-    DbPoolKey2,
 )
 from fastapi_oracle.errors import IntermittentDatabaseError
 
@@ -61,23 +60,15 @@ async def close_db_pool(pool: AsyncPoolWrapper):  # pragma: no cover
 
 async def get_or_create_db_pool(
     settings: Settings,
+    collection: str,
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get or create the DB connection pool."""
-    if settings.db_dsn:
-        pool_key = DbPoolKey2(
-            settings.db_user,
-            settings.db_dsn,
-        )
-    else:
-        pool_key = DbPoolKey(
-            settings.db_host,
-            settings.db_port,
-            settings.db_user,
-            settings.db_service_name,
-        )
-
+    pool_key = DbPoolKey(
+        collection
+    )
+    coll_settings = settings.dbsettings[collection]
     if pools.DB_POOLS.get(pool_key) is not None:
-        ttl = settings.db_conn_ttl
+        ttl = coll_settings.db_conn_ttl
         pool, created_time = pools.DB_POOLS[pool_key]
 
         if ttl is not None and time.monotonic() - created_time >= ttl:
@@ -88,20 +79,19 @@ async def get_or_create_db_pool(
             await close_db_pool(pool)
         else:
             return pool
-    if settings.db_dsn:
+    if coll_settings.db_dsn:
         pool = await create_pool(
-            user=settings.db_user,
-            password=settings.db_password,
-            dsn=settings.db_dsn,
+            user=coll_settings.db_user,
+            password=coll_settings.db_password,
+            dsn=coll_settings.db_dsn,
         )
     else:
-#         pool = await create_pool(f"{settings.db_user}/{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_service_name}")
         pool = await create_pool(
-            host=settings.db_host,
-            port=f"{settings.db_port}",
-            user=settings.db_user,
-            password=settings.db_password,
-            service_name=settings.db_service_name,
+            host=coll_settings.db_host,
+            port=f"{coll_settings.db_port}",
+            user=coll_settings.db_user,
+            password=coll_settings.db_password,
+            service_name=coll_settings.db_service_name,
         )
     pools.DB_POOLS[pool_key] = DbPoolAndCreatedTime(
         pool=pool, created_time=time.monotonic()
@@ -111,6 +101,7 @@ async def get_or_create_db_pool(
 
 async def get_db_pool(
     settings: Settings = Depends(get_settings),
+    collection: CollectionModel = Body(),
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get the DB connection pool.
 
@@ -122,7 +113,7 @@ async def get_db_pool(
     logger.warning(
         f'Settings: {settings}'
     )
-    return await get_or_create_db_pool(settings)
+    return await get_or_create_db_pool(settings, collection.collection)
 
 
 async def get_db_conn(
