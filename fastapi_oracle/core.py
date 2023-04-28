@@ -114,7 +114,7 @@ async def get_db_pool(
     logger.warning(
         f'Settings: {settings}'
     )
-    return await get_or_create_db_pool(settings, collection.collection)
+    return await get_or_create_db_pool(settings, collection)
 
 
 async def get_db_conn(
