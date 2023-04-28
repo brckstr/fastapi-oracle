@@ -101,8 +101,8 @@ async def get_or_create_db_pool(
 
 
 async def get_db_pool(
-    settings: Settings = Depends(get_settings),
     collection: Annotated[str, Body()],
+    settings: Settings = Depends(get_settings),
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get the DB connection pool.
 
