@@ -6,7 +6,7 @@ from typing import AsyncGenerator, Awaitable, Callable, ParamSpec, TypeVar
 from cx_Oracle import DatabaseError
 from cx_Oracle_async import create_pool, makedsn
 from cx_Oracle_async.pools import AsyncPoolWrapper
-from fastapi import Depends
+from fastapi import Body, Depends
 from loguru import logger
 
 from fastapi_oracle import pools
