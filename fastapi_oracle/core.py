@@ -2,6 +2,7 @@ import time
 from functools import wraps
 from re import Pattern
 from typing import AsyncGenerator, Awaitable, Callable, ParamSpec, TypeVar
+from typing_extensions import Annotated
 
 from cx_Oracle import DatabaseError
 from cx_Oracle_async import create_pool, makedsn
@@ -101,7 +102,7 @@ async def get_or_create_db_pool(
 
 async def get_db_pool(
     settings: Settings = Depends(get_settings),
-    collection: CollectionModel = Body(),
+    collection: CollectionModel = Annotated[str, Body()],
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get the DB connection pool.
 
