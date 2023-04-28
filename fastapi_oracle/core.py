@@ -11,7 +11,7 @@ from fastapi import Body, Depends
 from loguru import logger
 
 from fastapi_oracle import pools
-from fastapi_oracle.config import Settings, CollectionModel, get_settings
+from fastapi_oracle.config import Settings, get_settings
 from fastapi_oracle.constants import (
     CAMEL_TO_SNAKE_REGEX,
     DbPoolAndConn,
@@ -102,7 +102,7 @@ async def get_or_create_db_pool(
 
 async def get_db_pool(
     settings: Settings = Depends(get_settings),
-    collection: CollectionModel = Annotated[str, Body()],
+    collection: Annotated[str, Body()],
 ) -> AsyncPoolWrapper:  # pragma: no cover
     """Get the DB connection pool.
 
